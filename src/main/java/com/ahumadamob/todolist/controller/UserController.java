@@ -18,6 +18,7 @@ import com.ahumadamob.todolist.dto.ErrorResponseDto;
 import com.ahumadamob.todolist.dto.SuccessResponseDto;
 import com.ahumadamob.todolist.entity.User;
 import com.ahumadamob.todolist.service.IUserService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import jakarta.validation.Valid;
 
@@ -26,6 +27,7 @@ import jakarta.validation.Valid;
 public class UserController {
     private final IUserService userService;
 
+    @Autowired
     public UserController(IUserService userService) {
         this.userService = userService;
     }

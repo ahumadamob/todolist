@@ -5,12 +5,14 @@ import org.springframework.stereotype.Service;
 import com.ahumadamob.todolist.entity.Group;
 import com.ahumadamob.todolist.repository.GroupRepository;
 import com.ahumadamob.todolist.service.IGroupService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Service
 public class GroupServiceJpa implements IGroupService {
 
     private final GroupRepository groupRepository;
 
+    @Autowired
     public GroupServiceJpa(GroupRepository groupRepository) {
         this.groupRepository = groupRepository;
     }

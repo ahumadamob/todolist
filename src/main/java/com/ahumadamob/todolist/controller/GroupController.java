@@ -18,6 +18,7 @@ import com.ahumadamob.todolist.dto.ErrorResponseDto;
 import com.ahumadamob.todolist.dto.SuccessResponseDto;
 import com.ahumadamob.todolist.entity.Group;
 import com.ahumadamob.todolist.service.IGroupService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import jakarta.validation.Valid;
 
@@ -26,6 +27,7 @@ import jakarta.validation.Valid;
 public class GroupController {
     private final IGroupService groupService;
 
+    @Autowired
     public GroupController(IGroupService groupService) {
         this.groupService = groupService;
     }

@@ -5,12 +5,14 @@ import org.springframework.stereotype.Service;
 import com.ahumadamob.todolist.entity.User;
 import com.ahumadamob.todolist.repository.UserRepository;
 import com.ahumadamob.todolist.service.IUserService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Service
 public class UserServiceJpa implements IUserService {
 
     private final UserRepository userRepository;
 
+    @Autowired
     public UserServiceJpa(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
