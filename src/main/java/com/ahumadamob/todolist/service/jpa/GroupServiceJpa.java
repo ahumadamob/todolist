@@ -28,7 +28,7 @@ public class GroupServiceJpa implements IGroupService {
     @Override
     public Group update(Long id, GroupRequestDto dto) {
         Group existing = groupRepository.findById(id)
-                .orElseThrow(() -> new RecordNotFoundException("Group not found"));
+                .orElseThrow(() -> new RecordNotFoundException("Grupo no encontrado"));
         groupMapper.applyToEntity(dto, existing);
         return groupRepository.save(existing);
     }

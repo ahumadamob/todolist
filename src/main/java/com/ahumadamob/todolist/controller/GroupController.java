@@ -48,7 +48,7 @@ public class GroupController {
         Group group = groupService.findById(id);
         if (group == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ErrorResponseDto(Collections.singletonList("Group not found")));
+                    .body(new ErrorResponseDto(Collections.singletonList("Grupo no encontrado")));
         }
         return ResponseEntity.ok(new SuccessResponseDto<>("Group found", groupMapper.toDto(group)));
     }
