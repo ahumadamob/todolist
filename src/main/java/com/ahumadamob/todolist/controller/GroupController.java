@@ -18,7 +18,6 @@ import com.ahumadamob.todolist.dto.ErrorResponseDto;
 import com.ahumadamob.todolist.dto.SuccessResponseDto;
 import com.ahumadamob.todolist.entity.Group;
 import com.ahumadamob.todolist.service.IGroupService;
-import com.ahumadamob.todolist.exception.RecordNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import jakarta.validation.Valid;
@@ -53,14 +52,9 @@ public class GroupController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody Group group) {
-        try {
-            Group saved = groupService.update(id, group);
-            return ResponseEntity.ok(new SuccessResponseDto<>("Group updated", saved));
-        } catch (RecordNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ErrorResponseDto(Collections.singletonList(e.getMessage())));
-        }
+    public ResponseEntity<SuccessResponseDto<Group>> update(@PathVariable Long id, @Valid @RequestBody Group group) {
+        Group saved = groupService.update(id, group);
+        return ResponseEntity.ok(new SuccessResponseDto<>("Group updated", saved));
     }
 
     @DeleteMapping("/{id}")

@@ -18,7 +18,6 @@ import com.ahumadamob.todolist.dto.ErrorResponseDto;
 import com.ahumadamob.todolist.dto.SuccessResponseDto;
 import com.ahumadamob.todolist.entity.User;
 import com.ahumadamob.todolist.service.IUserService;
-import com.ahumadamob.todolist.exception.RecordNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import jakarta.validation.Valid;
@@ -53,14 +52,9 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody User user) {
-        try {
-            User saved = userService.update(id, user);
-            return ResponseEntity.ok(new SuccessResponseDto<>("User updated", saved));
-        } catch (RecordNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ErrorResponseDto(Collections.singletonList(e.getMessage())));
-        }
+    public ResponseEntity<SuccessResponseDto<User>> update(@PathVariable Long id, @Valid @RequestBody User user) {
+        User saved = userService.update(id, user);
+        return ResponseEntity.ok(new SuccessResponseDto<>("User updated", saved));
     }
 
     @DeleteMapping("/{id}")
