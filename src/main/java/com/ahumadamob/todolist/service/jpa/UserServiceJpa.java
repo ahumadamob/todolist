@@ -6,6 +6,8 @@ import com.ahumadamob.todolist.entity.User;
 import com.ahumadamob.todolist.repository.UserRepository;
 import com.ahumadamob.todolist.service.IUserService;
 import com.ahumadamob.todolist.exception.RecordNotFoundException;
+import com.ahumadamob.todolist.dto.UserRequestDto;
+import com.ahumadamob.todolist.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Service
@@ -14,17 +16,21 @@ public class UserServiceJpa implements IUserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private UserMapper userMapper;
+
     @Override
-    public User create(User user) {
+    public User create(UserRequestDto dto) {
+        User user = userMapper.toEntity(dto);
         return userRepository.save(user);
     }
 
     @Override
-    public User update(Long id, User user) {
+    public User update(Long id, UserRequestDto dto) {
         User existing = userRepository.findById(id)
                 .orElseThrow(() -> new RecordNotFoundException("User not found"));
-        user.setId(existing.getId());
-        return userRepository.save(user);
+        userMapper.applyToEntity(dto, existing);
+        return userRepository.save(existing);
     }
 
     @Override

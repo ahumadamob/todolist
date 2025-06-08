@@ -6,6 +6,8 @@ import com.ahumadamob.todolist.entity.Group;
 import com.ahumadamob.todolist.repository.GroupRepository;
 import com.ahumadamob.todolist.service.IGroupService;
 import com.ahumadamob.todolist.exception.RecordNotFoundException;
+import com.ahumadamob.todolist.dto.GroupRequestDto;
+import com.ahumadamob.todolist.mapper.GroupMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Service
@@ -14,17 +16,21 @@ public class GroupServiceJpa implements IGroupService {
     @Autowired
     private GroupRepository groupRepository;
 
+    @Autowired
+    private GroupMapper groupMapper;
+
     @Override
-    public Group create(Group group) {
+    public Group create(GroupRequestDto dto) {
+        Group group = groupMapper.toEntity(dto);
         return groupRepository.save(group);
     }
 
     @Override
-    public Group update(Long id, Group group) {
+    public Group update(Long id, GroupRequestDto dto) {
         Group existing = groupRepository.findById(id)
                 .orElseThrow(() -> new RecordNotFoundException("Group not found"));
-        group.setId(existing.getId());
-        return groupRepository.save(group);
+        groupMapper.applyToEntity(dto, existing);
+        return groupRepository.save(existing);
     }
 
     @Override
