@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ahumadamob.todolist.dto.ErrorDetailDto;
 import com.ahumadamob.todolist.dto.ErrorResponseDto;
 import com.ahumadamob.todolist.dto.SuccessResponseDto;
 import com.ahumadamob.todolist.dto.GroupRequestDto;
@@ -47,8 +48,9 @@ public class GroupController {
     public ResponseEntity<?> findById(@PathVariable Long id) {
         Group group = groupService.findById(id);
         if (group == null) {
+            ErrorDetailDto detail = new ErrorDetailDto("groupId", "Grupo no encontrado");
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ErrorResponseDto(Collections.singletonList("Group not found")));
+                    .body(new ErrorResponseDto(Collections.singletonList(detail)));
         }
         return ResponseEntity.ok(new SuccessResponseDto<>("Group found", groupMapper.toDto(group)));
     }

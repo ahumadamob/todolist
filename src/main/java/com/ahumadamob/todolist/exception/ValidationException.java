@@ -1,9 +1,12 @@
 package com.ahumadamob.todolist.exception;
 
-public class RecordNotFoundException extends RuntimeException {
+/**
+ * Exception thrown when validation rules are violated.
+ */
+public class ValidationException extends RuntimeException {
     private final String field;
 
-    public RecordNotFoundException(String field, String message) {
+    public ValidationException(String field, String message) {
         super(message);
         this.field = field;
     }
