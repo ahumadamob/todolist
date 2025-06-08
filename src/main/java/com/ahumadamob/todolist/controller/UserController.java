@@ -48,7 +48,7 @@ public class UserController {
     public ResponseEntity<?> findById(@PathVariable Long id) {
         User user = userService.findById(id);
         if (user == null) {
-            ErrorDetailDto detail = new ErrorDetailDto(null, "Usuario no encontrado");
+            ErrorDetailDto detail = new ErrorDetailDto("userId", "Usuario no encontrado");
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ErrorResponseDto(Collections.singletonList(detail)));
         }

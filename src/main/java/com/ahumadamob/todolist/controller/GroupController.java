@@ -48,7 +48,7 @@ public class GroupController {
     public ResponseEntity<?> findById(@PathVariable Long id) {
         Group group = groupService.findById(id);
         if (group == null) {
-            ErrorDetailDto detail = new ErrorDetailDto(null, "Grupo no encontrado");
+            ErrorDetailDto detail = new ErrorDetailDto("groupId", "Grupo no encontrado");
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ErrorResponseDto(Collections.singletonList(detail)));
         }
