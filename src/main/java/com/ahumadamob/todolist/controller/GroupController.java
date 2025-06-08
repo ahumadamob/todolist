@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ahumadamob.todolist.dto.ErrorResponseDto;
 import com.ahumadamob.todolist.dto.SuccessResponseDto;
+import com.ahumadamob.todolist.dto.GroupRequestDto;
+import com.ahumadamob.todolist.dto.GroupResponseDto;
 import com.ahumadamob.todolist.entity.Group;
 import com.ahumadamob.todolist.service.IGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +31,12 @@ public class GroupController {
     private IGroupService groupService;
 
     @GetMapping
-    public ResponseEntity<SuccessResponseDto<List<Group>>> findAll() {
+    public ResponseEntity<SuccessResponseDto<List<GroupResponseDto>>> findAll() {
         List<Group> groups = groupService.findAll();
-        return ResponseEntity.ok(new SuccessResponseDto<>("Groups retrieved", groups));
+        List<GroupResponseDto> dtos = groups.stream()
+                .map(this::toDto)
+                .toList();
+        return ResponseEntity.ok(new SuccessResponseDto<>("Groups retrieved", dtos));
     }
 
     @GetMapping("/{id}")
@@ -41,25 +46,37 @@ public class GroupController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ErrorResponseDto(Collections.singletonList("Group not found")));
         }
-        return ResponseEntity.ok(new SuccessResponseDto<>("Group found", group));
+        return ResponseEntity.ok(new SuccessResponseDto<>("Group found", toDto(group)));
     }
 
     @PostMapping
-    public ResponseEntity<SuccessResponseDto<Group>> create(@Valid @RequestBody Group group) {
+    public ResponseEntity<SuccessResponseDto<GroupResponseDto>> create(@Valid @RequestBody GroupRequestDto dto) {
+        Group group = toEntity(dto);
         Group saved = groupService.create(group);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new SuccessResponseDto<>("Group created", saved));
+                .body(new SuccessResponseDto<>("Group created", toDto(saved)));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<SuccessResponseDto<Group>> update(@PathVariable Long id, @Valid @RequestBody Group group) {
+    public ResponseEntity<SuccessResponseDto<GroupResponseDto>> update(@PathVariable Long id, @Valid @RequestBody GroupRequestDto dto) {
+        Group group = toEntity(dto);
         Group saved = groupService.update(id, group);
-        return ResponseEntity.ok(new SuccessResponseDto<>("Group updated", saved));
+        return ResponseEntity.ok(new SuccessResponseDto<>("Group updated", toDto(saved)));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<SuccessResponseDto<Void>> delete(@PathVariable Long id) {
         groupService.deleteById(id);
         return ResponseEntity.ok(new SuccessResponseDto<>("Group deleted", null));
+    }
+
+    private GroupResponseDto toDto(Group group) {
+        return new GroupResponseDto(group.getId(), group.getName());
+    }
+
+    private Group toEntity(GroupRequestDto dto) {
+        Group group = new Group();
+        group.setName(dto.getName());
+        return group;
     }
 }

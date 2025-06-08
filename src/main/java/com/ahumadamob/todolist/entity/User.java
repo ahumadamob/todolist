@@ -14,6 +14,8 @@ public class User {
 
     private String username;
 
+    private String password;
+
     @ManyToOne
     @JoinColumn(name = "group_id")
     private Group group;
@@ -21,9 +23,10 @@ public class User {
     public User() {
     }
 
-    public User(Long id, String username, Group group) {
+    public User(Long id, String username, String password, Group group) {
         this.id = id;
         this.username = username;
+        this.password = password;
         this.group = group;
     }
 
@@ -41,6 +44,14 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Group getGroup() {
