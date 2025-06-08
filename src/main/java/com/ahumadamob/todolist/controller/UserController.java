@@ -48,7 +48,7 @@ public class UserController {
         User user = userService.findById(id);
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ErrorResponseDto(Collections.singletonList("User not found")));
+                    .body(new ErrorResponseDto(Collections.singletonList("Usuario no encontrado")));
         }
         return ResponseEntity.ok(new SuccessResponseDto<>("User found", userMapper.toDto(user)));
     }

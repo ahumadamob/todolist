@@ -15,13 +15,13 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "username is mandatory")
-    @Size(max = 100, message = "username is too long")
+    @NotBlank(message = "El nombre de usuario es obligatorio")
+    @Size(min = 3, max = 100, message = "El nombre de usuario debe tener entre 3 y 100 caracteres")
     @Column(unique = true)
     private String username;
 
-    @NotBlank(message = "password is mandatory")
-    @Size(max = 100, message = "password is too long")
+    @NotBlank(message = "La contraseña es obligatoria")
+    @Size(max = 100, message = "La contraseña es demasiado larga")
     private String password;
 
     @ManyToOne

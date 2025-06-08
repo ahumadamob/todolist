@@ -23,7 +23,7 @@ public class UserServiceJpa implements IUserService {
     @Override
     public User create(UserRequestDto dto) {
         if (userRepository.existsByUsername(dto.getUsername())) {
-            throw new ValidationException("Username already exists");
+            throw new ValidationException("El nombre de usuario ya existe");
         }
         User user = userMapper.toEntity(dto);
         return userRepository.save(user);
@@ -32,10 +32,10 @@ public class UserServiceJpa implements IUserService {
     @Override
     public User update(Long id, UserRequestDto dto) {
         User existing = userRepository.findById(id)
-                .orElseThrow(() -> new RecordNotFoundException("User not found"));
+                .orElseThrow(() -> new RecordNotFoundException("Usuario no encontrado"));
         if (!existing.getUsername().equals(dto.getUsername()) &&
                 userRepository.existsByUsername(dto.getUsername())) {
-            throw new ValidationException("Username already exists");
+            throw new ValidationException("El nombre de usuario ya existe");
         }
         userMapper.applyToEntity(dto, existing);
         return userRepository.save(existing);
