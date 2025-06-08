@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import jakarta.validation.ConstraintViolationException;
 
+import com.ahumadamob.todolist.dto.ErrorDetailDto;
 import com.ahumadamob.todolist.dto.ErrorResponseDto;
 
 @RestControllerAdvice
@@ -18,29 +19,31 @@ public class RestExceptionHandler {
 
     @ExceptionHandler(RecordNotFoundException.class)
     public ResponseEntity<ErrorResponseDto> handleRecordNotFound(RecordNotFoundException ex) {
-        ErrorResponseDto dto = new ErrorResponseDto(Collections.singletonList(ex.getMessage()));
+        ErrorDetailDto detail = new ErrorDetailDto(ex.getField(), ex.getMessage());
+        ErrorResponseDto dto = new ErrorResponseDto(Collections.singletonList(detail));
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(dto);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponseDto> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
-        List<String> errors = ex.getBindingResult().getFieldErrors().stream()
-                .map(DefaultMessageSourceResolvable::getDefaultMessage)
+        List<ErrorDetailDto> errors = ex.getBindingResult().getFieldErrors().stream()
+                .map(fe -> new ErrorDetailDto(fe.getField(), fe.getDefaultMessage()))
                 .toList();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDto(errors));
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ErrorResponseDto> handleConstraintViolation(ConstraintViolationException ex) {
-        List<String> errors = ex.getConstraintViolations().stream()
-                .map(cv -> cv.getMessage())
+        List<ErrorDetailDto> errors = ex.getConstraintViolations().stream()
+                .map(cv -> new ErrorDetailDto(cv.getPropertyPath().toString(), cv.getMessage()))
                 .toList();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseDto(errors));
     }
 
     @ExceptionHandler(ValidationException.class)
     public ResponseEntity<ErrorResponseDto> handleValidationException(ValidationException ex) {
-        ErrorResponseDto dto = new ErrorResponseDto(Collections.singletonList(ex.getMessage()));
+        ErrorDetailDto detail = new ErrorDetailDto(ex.getField(), ex.getMessage());
+        ErrorResponseDto dto = new ErrorResponseDto(Collections.singletonList(detail));
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(dto);
     }
 }
