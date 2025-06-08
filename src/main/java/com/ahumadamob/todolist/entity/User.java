@@ -6,14 +6,22 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Column;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 @Entity
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "username is mandatory")
+    @Size(max = 100, message = "username is too long")
+    @Column(unique = true)
     private String username;
 
+    @NotBlank(message = "password is mandatory")
+    @Size(max = 100, message = "password is too long")
     private String password;
 
     @ManyToOne
