@@ -19,7 +19,7 @@ public class RestExceptionHandler {
 
     @ExceptionHandler(RecordNotFoundException.class)
     public ResponseEntity<ErrorResponseDto> handleRecordNotFound(RecordNotFoundException ex) {
-        ErrorDetailDto detail = new ErrorDetailDto(null, ex.getMessage());
+        ErrorDetailDto detail = new ErrorDetailDto(ex.getField(), ex.getMessage());
         ErrorResponseDto dto = new ErrorResponseDto(Collections.singletonList(detail));
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(dto);
     }
@@ -42,7 +42,7 @@ public class RestExceptionHandler {
 
     @ExceptionHandler(ValidationException.class)
     public ResponseEntity<ErrorResponseDto> handleValidationException(ValidationException ex) {
-        ErrorDetailDto detail = new ErrorDetailDto(null, ex.getMessage());
+        ErrorDetailDto detail = new ErrorDetailDto(ex.getField(), ex.getMessage());
         ErrorResponseDto dto = new ErrorResponseDto(Collections.singletonList(detail));
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(dto);
     }

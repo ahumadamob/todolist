@@ -29,7 +29,7 @@ public class UserMapper {
 
         if (dto.getGroupId() != null) {
             Group group = groupRepository.findById(dto.getGroupId())
-                    .orElseThrow(() -> new RecordNotFoundException("Grupo no encontrado"));
+                    .orElseThrow(() -> new RecordNotFoundException("groupId", "Grupo no encontrado"));
             user.setGroup(group);
         } else {
             user.setGroup(null);
