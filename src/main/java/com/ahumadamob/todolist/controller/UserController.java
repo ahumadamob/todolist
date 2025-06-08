@@ -26,12 +26,8 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/users")
 public class UserController {
-    private final IUserService userService;
-
     @Autowired
-    public UserController(IUserService userService) {
-        this.userService = userService;
-    }
+    private IUserService userService;
 
     @GetMapping
     public ResponseEntity<SuccessResponseDto<List<User>>> findAll() {

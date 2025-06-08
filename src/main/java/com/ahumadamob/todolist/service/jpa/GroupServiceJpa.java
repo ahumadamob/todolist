@@ -11,12 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Service
 public class GroupServiceJpa implements IGroupService {
 
-    private final GroupRepository groupRepository;
-
     @Autowired
-    public GroupServiceJpa(GroupRepository groupRepository) {
-        this.groupRepository = groupRepository;
-    }
+    private GroupRepository groupRepository;
 
     @Override
     public Group create(Group group) {

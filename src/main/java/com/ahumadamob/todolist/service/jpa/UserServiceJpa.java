@@ -11,12 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Service
 public class UserServiceJpa implements IUserService {
 
-    private final UserRepository userRepository;
-
     @Autowired
-    public UserServiceJpa(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    private UserRepository userRepository;
 
     @Override
     public User create(User user) {

@@ -26,12 +26,8 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/groups")
 public class GroupController {
-    private final IGroupService groupService;
-
     @Autowired
-    public GroupController(IGroupService groupService) {
-        this.groupService = groupService;
-    }
+    private IGroupService groupService;
 
     @GetMapping
     public ResponseEntity<SuccessResponseDto<List<Group>>> findAll() {
