@@ -2,6 +2,8 @@ package com.ahumadamob.todolist.exception;
 
 import java.util.Collections;
 import java.util.List;
+import java.sql.SQLIntegrityConstraintViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -45,5 +47,22 @@ public class RestExceptionHandler {
         ErrorDetailDto detail = new ErrorDetailDto(ex.getField(), ex.getMessage());
         ErrorResponseDto dto = new ErrorResponseDto(Collections.singletonList(detail));
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(dto);
+    }
+
+    @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
+    public ResponseEntity<ErrorResponseDto> handleSqlIntegrityViolation(SQLIntegrityConstraintViolationException ex) {
+        ErrorDetailDto detail = new ErrorDetailDto("id", "El registro no puede ser eliminado porque está en uso");
+        ErrorResponseDto dto = new ErrorResponseDto(Collections.singletonList(detail));
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(dto);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorResponseDto> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
+        if (ex.getRootCause() instanceof SQLIntegrityConstraintViolationException sqlEx) {
+            return handleSqlIntegrityViolation(sqlEx);
+        }
+        ErrorDetailDto detail = new ErrorDetailDto("id", "Violación de integridad de datos");
+        ErrorResponseDto dto = new ErrorResponseDto(Collections.singletonList(detail));
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(dto);
     }
 }
