@@ -8,6 +8,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import java.math.BigDecimal;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -28,6 +29,12 @@ public class Materia {
     @JoinColumn(name = "carrera_id")
     private Carrera carrera;
 
+    private String codigo;
+
+    private String descripcion;
+
+    private Integer cargaHoraria;
+
     @ManyToMany
     @JoinTable(name = "materia_correlativa",
         joinColumns = @JoinColumn(name = "materia_id"),
@@ -37,9 +44,13 @@ public class Materia {
     public Materia() {
     }
 
-    public Materia(Long id, String nombre, Carrera carrera, List<Materia> correlativas) {
+    public Materia(Long id, String nombre, String codigo, String descripcion,
+                   Integer cargaHoraria, Carrera carrera, List<Materia> correlativas) {
         this.id = id;
         this.nombre = nombre;
+        this.codigo = codigo;
+        this.descripcion = descripcion;
+        this.cargaHoraria = cargaHoraria;
         this.carrera = carrera;
         this.correlativas = correlativas;
     }
@@ -58,6 +69,30 @@ public class Materia {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public Integer getCargaHoraria() {
+        return cargaHoraria;
+    }
+
+    public void setCargaHoraria(Integer cargaHoraria) {
+        this.cargaHoraria = cargaHoraria;
     }
 
     public Carrera getCarrera() {
